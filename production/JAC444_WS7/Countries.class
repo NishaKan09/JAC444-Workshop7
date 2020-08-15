@@ -1,0 +1,72 @@
+package ca.senecacollege.ws7_task2;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Countries {
+    public static String[] results = new String[2];
+
+    public Countries() {
+    }
+
+    private static void search(String userInput) throws IOException {
+        BufferedReader br = null;
+        File sourceFile = new File("countriesAndCapitals.txt");
+
+        try {
+            br = new BufferedReader(new FileReader(sourceFile));
+        } catch (Exception var7) {
+            System.out.println("Cannot read file");
+            System.exit(0);
+        }
+
+        String line;
+        try {
+            while((line = br.readLine()) != null) {
+                String[] columns = line.split(":");
+                String country = columns[0];
+                String capital = columns[1];
+                if (country.toLowerCase().contains(userInput.toLowerCase())) {
+                    results[0] = country;
+                    results[1] = capital;
+                }
+            }
+        } catch (Exception var8) {
+            System.out.println(var8.getMessage() + " Error Reading File");
+        }
+
+    }
+
+    private static void display() throws IOException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("Enter a country to find out the capital: ");
+        String userInput = in.nextLine();
+        System.out.println("--------------------------------------------------------------");
+        search(userInput);
+        PrintStream var10000 = System.out;
+        String var10001 = userInput.toUpperCase();
+        var10000.println("The Capital of " + var10001 + " is: " + results[1]);
+    }
+
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        boolean exit = false;
+
+        while(!exit) {
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("Enter '1' to find the capital of a country or '2' to exit: ");
+            int exitStatus = in.nextInt();
+            if (exitStatus == 2) {
+                exit = true;
+            } else {
+                display();
+            }
+        }
+
+    }
+}
